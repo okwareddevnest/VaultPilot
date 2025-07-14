@@ -79,22 +79,22 @@ const Timeline = () => {
                         {item.status.charAt(0).toUpperCase() + item.status.slice(1).replace('-', ' ')}
                       </span>
                       <span className="text-sm text-gray-500 dark:text-gray-400">
-                        {item.timeline}
+                        {item.quarter}
                       </span>
                     </div>
                   </div>
 
                   <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
-                    {item.description}
+                    Milestone goals for {item.quarter}
                   </p>
 
-                  {item.features && item.features.length > 0 && (
+                  {item.items && item.items.length > 0 && (
                     <div className="space-y-2">
                       <h4 className="font-semibold text-gray-900 dark:text-white text-sm">
                         Key Features:
                       </h4>
                       <ul className="space-y-1">
-                        {item.features.map((feature, featureIndex) => (
+                        {item.items.map((feature: string, featureIndex: number) => (
                           <li key={featureIndex} className="flex items-start space-x-2 text-sm text-gray-600 dark:text-gray-300">
                             <div className="w-1.5 h-1.5 bg-primary-turquoise rounded-full mt-2 flex-shrink-0"></div>
                             <span>{feature}</span>
