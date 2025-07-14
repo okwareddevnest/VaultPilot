@@ -1,3 +1,4 @@
+// UPDATED: Added dark mode support and improved mobile accessibility
 import { Link, useLocation } from 'react-router-dom'
 import { Shield, Vault, Wallet, BarChart3, Settings } from 'lucide-react'
 
@@ -13,10 +14,10 @@ const Sidebar = () => {
   ]
 
   return (
-    <div className="w-64 bg-primary-purple text-white h-screen flex flex-col">
+    <div className="w-64 bg-primary-purple dark:bg-gray-900 text-white h-screen flex flex-col">
       <div className="p-6">
         <div className="flex items-center space-x-3">
-          <Shield className="w-8 h-8 text-primary-turquoise" />
+          <img src="/VaultPilot.png" alt="VaultPilot" className="w-8 h-8" />
           <span className="text-xl font-bold">VaultPilot</span>
         </div>
       </div>
@@ -31,10 +32,10 @@ const Sidebar = () => {
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors min-h-[44px] ${
                     isActive
-                      ? 'bg-primary-turquoise text-primary-purple'
-                      : 'hover:bg-purple-700'
+                      ? 'bg-primary-turquoise text-primary-purple dark:text-primary-purple'
+                      : 'hover:bg-purple-700 dark:hover:bg-gray-800'
                   }`}
                 >
                   <Icon className="w-5 h-5" />

@@ -1,29 +1,9 @@
-import { useState } from 'react'
+// UPDATED: Replaced with useAptosWallet hook integration
 import { Wallet } from 'lucide-react'
+import { useAptosWallet } from '../hooks/useAptosWallet'
 
 const ConnectWallet = () => {
-  const [isConnected, setIsConnected] = useState(false)
-  const [walletAddress, setWalletAddress] = useState('')
-
-  const connectWallet = async () => {
-    try {
-      if (typeof window !== 'undefined' && 'aptos' in window) {
-        const wallet = (window as any).aptos
-        const response = await wallet.connect()
-        setWalletAddress(response.address)
-        setIsConnected(true)
-      } else {
-        alert('Petra wallet not found. Please install Petra wallet extension.')
-      }
-    } catch (error) {
-      console.error('Failed to connect wallet:', error)
-    }
-  }
-
-  const disconnectWallet = () => {
-    setIsConnected(false)
-    setWalletAddress('')
-  }
+  const { account, isConnected, isConnecting, connect, disconnect } = useAptosWallet()
 
   const formatAddress = (address: string) => {
     return `${address.slice(0, 6)}...${address.slice(-4)}`
@@ -31,23 +11,24 @@ const ConnectWallet = () => {
 
   return (
     <div>
-      {isConnected ? (
+      {isConnected && account ? (
         <div className="flex items-center space-x-2">
-          <span className="text-sm text-gray-600">{formatAddress(walletAddress)}</span>
+          <span className="text-sm text-gray-600 dark:text-gray-300">{formatAddress(account.address)}</span>
           <button
-            onClick={disconnectWallet}
-            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+            onClick={disconnect}
+            className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors min-h-[44px]"
           >
             Disconnect
           </button>
         </div>
       ) : (
         <button
-          onClick={connectWallet}
-          className="flex items-center space-x-2 px-4 py-2 bg-primary-turquoise text-white rounded-lg hover:bg-opacity-90 transition-colors"
+          onClick={connect}
+          disabled={isConnecting}
+          className="flex items-center space-x-2 px-4 py-2 bg-primary-turquoise text-white rounded-lg hover:bg-opacity-90 transition-colors disabled:opacity-50 min-h-[44px]"
         >
           <Wallet className="w-4 h-4" />
-          <span>Connect Wallet</span>
+          <span>{isConnecting ? 'Connecting...' : 'Connect Wallet'}</span>
         </button>
       )}
     </div>
