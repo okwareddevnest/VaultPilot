@@ -5,52 +5,32 @@ import Topbar from '../components/Topbar'
 import TokenBalance from '../components/TokenBalance'
 import { Send, Plus, Minus, Zap } from 'lucide-react'
 import { useStaking } from '../hooks/useStaking'
+import { useTokenBalances } from '../hooks/useTokenBalances'
+import { useAptosWallet } from '../hooks/useAptosWallet'
 import toast from 'react-hot-toast'
 
-const mockTokens = [
-  {
-    symbol: 'APT',
-    balance: '45.80',
-    value: '$847.20',
-    change: '+$12.45',
-    changePercent: '+1.5%'
-  },
-  {
-    symbol: 'USDC',
-    balance: '2,847.32',
-    value: '$2,847.32',
-    change: '+$0.12',
-    changePercent: '+0.004%'
-  },
-  {
-    symbol: 'GUI',
-    balance: '1,250.50',
-    value: '$3,751.50',
-    change: '+$125.30',
-    changePercent: '+3.5%'
-  }
-]
 
-const mockVaultPositions = [
+// Mock vault positions - adjust based on network
+const getMockVaultPositions = (isTestnet: boolean) => [
   {
     name: 'Arbitrage Bot Alpha',
-    invested: '$2,500.00',
-    current: '$2,847.32',
-    profit: '+$347.32',
-    profitPercent: '+13.9%'
+    invested: isTestnet ? '$50.00' : '$2,500.00',
+    current: isTestnet ? '$57.95' : '$2,847.32',
+    profit: isTestnet ? '+$7.95' : '+$347.32',
+    profitPercent: '+15.9%'
   },
   {
     name: 'Yield Farm Pro',
-    invested: '$5,000.00',
-    current: '$5,642.18',
-    profit: '+$642.18',
+    invested: isTestnet ? '$75.00' : '$5,000.00',
+    current: isTestnet ? '$84.60' : '$5,642.18',
+    profit: isTestnet ? '+$9.60' : '+$642.18',
     profitPercent: '+12.8%'
   },
   {
     name: 'Stablecoin Yield',
-    invested: '$3,200.00',
-    current: '$3,358.40',
-    profit: '+$158.40',
+    invested: isTestnet ? '$25.00' : '$3,200.00',
+    current: isTestnet ? '$26.25' : '$3,358.40',
+    profit: isTestnet ? '+$1.25' : '+$158.40',
     profitPercent: '+5.0%'
   }
 ]
@@ -60,6 +40,10 @@ const Wallet = () => {
   const [unstakeAmount, setUnstakeAmount] = useState('')
   const [showMobileSidebar, setShowMobileSidebar] = useState(false)
   const { stakingData, isStaking, isUnstaking, stakeGui, unstakeGui, claimRewards } = useStaking()
+  const { balances } = useTokenBalances()
+  const { network } = useAptosWallet()
+  
+  const mockVaultPositions = getMockVaultPositions(network === 'testnet')
 
   const handleStake = async () => {
     const amount = parseFloat(stakeAmount)
@@ -112,12 +96,19 @@ const Wallet = () => {
             {/* Total Portfolio Value */}
             <div className="bg-gradient-to-r from-primary-purple to-primary-turquoise p-6 lg:p-8 rounded-lg text-white mb-8">
               <h2 className="text-lg font-medium mb-2">Total Portfolio Value</h2>
-              <p className="text-3xl lg:text-4xl font-bold mb-4">$18,294.52</p>
+              <p className="text-3xl lg:text-4xl font-bold mb-4">
+                {network === 'testnet' ? '$378.15' : '$18,294.52'}
+              </p>
               <div className="flex items-center text-sm">
                 <span className="bg-white/20 px-3 py-1 rounded-full">
-                  +$1,147.23 (+6.7%) 24h
+                  {network === 'testnet' ? '+$25.78 (+7.3%) 24h' : '+$1,147.23 (+6.7%) 24h'}
                 </span>
               </div>
+              {network === 'testnet' && (
+                <p className="text-xs mt-2 opacity-75">
+                  🧪 Testnet balances - Perfect for testing VaultPilot features!
+                </p>
+              )}
             </div>
 
             <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
@@ -138,7 +129,7 @@ const Wallet = () => {
                 </div>
 
                 <div className="space-y-4 mb-8">
-                  {mockTokens.map((token) => (
+                  {balances.map((token) => (
                     <TokenBalance key={token.symbol} {...token} />
                   ))}
                 </div>

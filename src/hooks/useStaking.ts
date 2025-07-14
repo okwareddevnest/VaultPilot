@@ -20,10 +20,15 @@ interface UseStaking {
 }
 
 export const useStaking = (): UseStaking => {
+  const { network } = useAptosWallet()
+  
+  // Use realistic testnet amounts
+  const isTestnet = network === 'testnet'
+  
   const [stakingData, setStakingData] = useState<StakingData>({
-    availableBalance: 1250.50,
-    stakedAmount: 850.00,
-    pendingRewards: 20.77,
+    availableBalance: isTestnet ? 75.25 : 1250.50,
+    stakedAmount: isTestnet ? 25.00 : 850.00,
+    pendingRewards: isTestnet ? 3.42 : 20.77,
     stakingApy: 8.5
   })
   

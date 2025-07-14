@@ -4,6 +4,7 @@ import { Menu, Sun, Moon, ChevronDown } from 'lucide-react'
 import ConnectWallet from './ConnectWallet'
 import { useAptosWallet, type Network } from '../hooks/useAptosWallet'
 import { useTheme } from '../hooks/useTheme'
+import { useTokenBalances } from '../hooks/useTokenBalances'
 
 interface TopbarProps {
   onMobileMenuToggle?: () => void
@@ -12,6 +13,7 @@ interface TopbarProps {
 const Topbar = ({ onMobileMenuToggle }: TopbarProps) => {
   const { network, switchNetwork } = useAptosWallet()
   const { theme, toggleTheme } = useTheme()
+  const { aptBalance, guiBalance } = useTokenBalances()
   const [showNetworkDropdown, setShowNetworkDropdown] = useState(false)
 
   const handleNetworkSwitch = async (newNetwork: Network) => {
@@ -38,11 +40,11 @@ const Topbar = ({ onMobileMenuToggle }: TopbarProps) => {
         <div className="hidden md:flex items-center space-x-4">
           <div className="text-sm">
             <span className="text-gray-600 dark:text-gray-300">GUI:</span>
-            <span className="font-semibold text-primary-purple dark:text-primary-turquoise ml-1">1,250.50</span>
+            <span className="font-semibold text-primary-purple dark:text-primary-turquoise ml-1">{guiBalance}</span>
           </div>
           <div className="text-sm">
             <span className="text-gray-600 dark:text-gray-300">APT:</span>
-            <span className="font-semibold text-primary-purple dark:text-primary-turquoise ml-1">45.80</span>
+            <span className="font-semibold text-primary-purple dark:text-primary-turquoise ml-1">{aptBalance}</span>
           </div>
         </div>
         

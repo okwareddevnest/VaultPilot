@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import { Shield, Zap, TrendingUp, Lock } from 'lucide-react'
+import WalletBanner from '../components/WalletBanner'
 
 const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-purple via-purple-800 to-primary-turquoise">
+      <WalletBanner />
       <div className="container mx-auto px-6 py-12">
         {/* Header */}
         <header className="flex items-center justify-between mb-16">

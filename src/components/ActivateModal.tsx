@@ -30,8 +30,9 @@ const ActivateModal = ({ isOpen, onClose, vault }: ActivateModalProps) => {
   const [priceData, setPriceData] = useState<PriceData | null>(null)
   const [loadingPrices, setLoadingPrices] = useState(true)
   
-  const { signAndSubmitTransaction, isConnected } = useAptosWallet()
-  const guiFee = 50 // GUI tokens
+  const { signAndSubmitTransaction, isConnected, network } = useAptosWallet()
+  // Use smaller fees for testnet
+  const guiFee = network === 'testnet' ? 5 : 50 // GUI tokens
 
   // Fetch live prices on modal open
   useEffect(() => {
